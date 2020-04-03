@@ -2,6 +2,7 @@ package com.example.kotlinmppandroid
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import egger.software.kotlinmpp.add
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -12,10 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         calculateButton.setOnClickListener {
 
-            val numberA = inputA.text.toString().toDoubleOrNull() ?: 0.0
-            val numberB = inputB.text.toString().toDoubleOrNull() ?: 0.0
-            val resultValue = numberA + numberB
-            result.text = "Result: ${resultValue}"
+            result.text = add(inputA.text.toString(), inputB.text.toString())
 
         }
     }

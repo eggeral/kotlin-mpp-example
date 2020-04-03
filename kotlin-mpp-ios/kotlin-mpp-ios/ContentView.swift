@@ -1,11 +1,12 @@
 
 import SwiftUI
+import kotlin_mpp_common
 
 struct ContentView: View {
     
     @State private var inputA = ""
     @State private var inputB = ""
-    @State private var result = 0.0
+    @State private var result = ""
 
     var body: some View {
         
@@ -21,9 +22,7 @@ struct ContentView: View {
                     .keyboardType(.numberPad)
             }
             Button(action: {
-                let numberA = Double(self.inputA) ?? 0.0
-                let numberB = Double(self.inputB) ?? 0.0
-                self.result = numberA + numberB
+                self.result = CalculatorKt.add(inputA: self.inputA,inputB: self.inputB)
             }) {
                 Text("Calculate")
             }

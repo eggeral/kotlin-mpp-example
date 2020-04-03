@@ -1,0 +1,7 @@
+rootProject.name = 'kotlin-mpp-examples'
+
+include ':kotlin-mpp-common'
+include ':kotlin-mpp-android'
+include ':kotlin-mpp-android:app'
+
+enableFeaturePreview("GRADLE_METADATA")
