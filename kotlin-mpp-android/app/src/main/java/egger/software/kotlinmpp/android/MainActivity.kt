@@ -15,8 +15,9 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.activity_main)
 
-        val size = 15
-        val board = Board(size, size)
+        val columns = 30
+        val rows = 50
+        val board = Board(columns, rows)
         board.setCells(
             """
                 ***_*
@@ -24,10 +25,10 @@ class MainActivity : AppCompatActivity() {
                 ___**
                 _**_*
                 *_*_*
-                """.trimIndent().cells().translatedTo(size / 2 - 2, size / 2 - 2))
+                """.trimIndent().cells().translatedTo(columns / 2 - 2, rows / 2 - 2))
 
 
-        boardView.cellSize = 10.0f * resources.displayMetrics.density
+        boardView.cellSize = 14.0f * resources.displayMetrics.density
         boardView.board = board
 
         fixedRateTimer("GameLoop", false, period = 500L) {

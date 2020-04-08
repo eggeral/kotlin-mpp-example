@@ -13,14 +13,14 @@ import egger.software.kotlinmpp.libgol.Cell
 class BoardView : View {
 
     private val paint = Paint().apply {
-        color = Color.DKGRAY
+        color = Color.GRAY
         style = Paint.Style.FILL
         strokeWidth = 0.0f
     }
 
     var board: Board? = null
     var cellSize: Float = 25f // Overwritten in MainActivity
-    var cellPadding: Float = 10f
+    var cellPadding: Float = 4f
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
