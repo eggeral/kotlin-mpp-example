@@ -17,7 +17,6 @@
 		5E26930124330A56006C7147 /* kotlin_mpp_iosUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E26930024330A56006C7147 /* kotlin_mpp_iosUITests.swift */; };
 		5E2693102435AE67006C7147 /* kotlin_mpp_common.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E26930F2435AE67006C7147 /* kotlin_mpp_common.framework */; };
 		5E2693112435AE67006C7147 /* kotlin_mpp_common.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 5E26930F2435AE67006C7147 /* kotlin_mpp_common.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5E8219842438753800906993 /* BoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8219832438753800906993 /* BoardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,7 +66,6 @@
 		5E26930024330A56006C7147 /* kotlin_mpp_iosUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = kotlin_mpp_iosUITests.swift; sourceTree = "<group>"; };
 		5E26930224330A56006C7147 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5E26930F2435AE67006C7147 /* kotlin_mpp_common.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = kotlin_mpp_common.framework; path = "../kotlin-mpp-common/build/bin/iosX64/debugFramework/kotlin_mpp_common.framework"; sourceTree = "<group>"; };
-		5E8219832438753800906993 /* BoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -127,7 +125,6 @@
 				5E2692E924330A56006C7147 /* LaunchScreen.storyboard */,
 				5E2692EC24330A56006C7147 /* Info.plist */,
 				5E2692E624330A56006C7147 /* Preview Content */,
-				5E8219832438753800906993 /* BoardView.swift */,
 			);
 			path = "kotlin-mpp-ios";
 			sourceTree = "<group>";
@@ -299,7 +296,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E2692DF24330A55006C7147 /* AppDelegate.swift in Sources */,
-				5E8219842438753800906993 /* BoardView.swift in Sources */,
 				5E2692E124330A55006C7147 /* SceneDelegate.swift in Sources */,
 				5E2692E324330A55006C7147 /* ContentView.swift in Sources */,
 			);
