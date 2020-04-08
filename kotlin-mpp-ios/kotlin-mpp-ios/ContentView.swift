@@ -4,13 +4,13 @@ import SwiftUI
 import kotlin_mpp_common
 
 class BoardStore: ObservableObject {
-    
+
     private let size:Int32 = 15;
-    
+
     let objectWillChange = ObservableObjectPublisher()
-    
+
     var board: Board
-    
+
     init() {
         board = Board.init(columns: size, rows: size)
         let cells = BoardKt.cells(
@@ -26,7 +26,7 @@ class BoardStore: ObservableObject {
         board.setCells(cellDefinitions: cellsCentered)
 
     }
-    
+
     func calculateNextGeneration() {
         self.board.calculateNextGeneration()
         self.objectWillChange.send()
@@ -35,12 +35,12 @@ class BoardStore: ObservableObject {
 }
 
 struct ContentView: View {
-    
+
     @ObservedObject var boardStore = BoardStore()
     let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
     var body: some View {
-        
+
         BoardView(board: $boardStore.board).onReceive(self.timer) { time in
             self.boardStore.calculateNextGeneration()
         }
