@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
                 """.trimIndent().cells().translatedTo(size / 2 - 2, size / 2 - 2))
 
 
-        boardView.cellSize = 40.0f * resources.displayMetrics.density
+        boardView.cellSize = 10.0f * resources.displayMetrics.density
         boardView.board = board
 
         fixedRateTimer("GameLoop", false, period = 500L) {

@@ -1,38 +1,49 @@
 
+import Combine
 import SwiftUI
 import kotlin_mpp_common
 
+class BoardStore: ObservableObject {
+    
+    private let size:Int32 = 15;
+    
+    let objectWillChange = ObservableObjectPublisher()
+    
+    var board: Board
+    
+    init() {
+        board = Board.init(columns: size, rows: size)
+        let cells = BoardKt.cells(
+            """
+            ***_*
+            *____
+            ___**
+            _**_*
+            *_*_*
+            """)
+        let cellsCentered = BoardKt.translatedTo(
+            cells, column: size / 2 - 2, row: size / 2 - 2 )
+        board.setCells(cellDefinitions: cellsCentered)
+
+    }
+    
+    func calculateNextGeneration() {
+        self.board.calculateNextGeneration()
+        self.objectWillChange.send()
+    }
+
+}
+
 struct ContentView: View {
     
-    @State private var inputA = ""
-    @State private var inputB = ""
-    @State private var result = ""
+    @ObservedObject var boardStore = BoardStore()
+    let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
     var body: some View {
         
-        VStack {
-            HStack {
-                TextField("Number A", text: $inputA)
-                    .padding([.leading, .bottom])
-                    .keyboardType(.numberPad)
-            }
-            HStack {
-                TextField("Number B", text: $inputB)
-                    .padding([.leading, .bottom])
-                    .keyboardType(.numberPad)
-            }
-            Button(action: {
-                self.result = CalculatorKt.add(inputA: self.inputA,inputB: self.inputB)
-            }) {
-                Text("Calculate")
-            }
-            .padding(.bottom)
-            HStack {
-                Text("Result: \(self.result)")
-            }
-
+        BoardView(board: $boardStore.board).onReceive(self.timer) { time in
+            self.boardStore.calculateNextGeneration()
         }
-        
     }
 }
 

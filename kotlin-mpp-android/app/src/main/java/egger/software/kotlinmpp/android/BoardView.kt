@@ -19,7 +19,7 @@ class BoardView : View {
     }
 
     var board: Board? = null
-    var cellSize: Float = 25f
+    var cellSize: Float = 25f // Overwritten in MainActivity
     var cellPadding: Float = 10f
 
     constructor(context: Context?) : super(context)
