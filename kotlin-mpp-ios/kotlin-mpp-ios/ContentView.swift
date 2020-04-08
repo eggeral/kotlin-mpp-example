@@ -1,38 +1,50 @@
 
+import Combine
 import SwiftUI
 import kotlin_mpp_common
 
+class BoardStore: ObservableObject {
+
+    let columns: Int32 = 30
+    let rows: Int32 = 50
+
+    let objectWillChange = ObservableObjectPublisher()
+
+    var board: Board
+
+    init() {
+        self.board = Board.init(columns: columns, rows: rows)
+        let cells = BoardKt.cells(
+            """
+            ***_*
+            *____
+            ___**
+            _**_*
+            *_*_*
+            """)
+        let cellsCentered = BoardKt.translatedTo(
+            cells, column: columns / 2 - 2, row: rows / 2 - 2 )
+        board.setCells(cellDefinitions: cellsCentered)
+
+    }
+
+    func calculateNextGeneration() {
+        self.board.calculateNextGeneration()
+        self.objectWillChange.send()
+    }
+
+}
+
 struct ContentView: View {
 
-    @State private var inputA = ""
-    @State private var inputB = ""
-    @State private var result = "Result:"
+    @ObservedObject var boardStore = BoardStore()
+    let timer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
 
     var body: some View {
 
-        VStack {
-            HStack {
-                TextField("Number A", text: $inputA)
-                    .padding([.leading, .bottom])
-                    .keyboardType(.numberPad)
-            }
-            HStack {
-                TextField("Number B", text: $inputB)
-                    .padding([.leading, .bottom])
-                    .keyboardType(.numberPad)
-            }
-            Button(action: {
-                self.result = CalculatorKt.add(inputA: self.inputA,inputB: self.inputB)
-            }) {
-                Text("Calculate")
-            }
-            .padding(.bottom)
-            HStack {
-                Text(self.result)
+        BoardView(board: $boardStore.board).onReceive(self.timer) { time in
+            self.boardStore.calculateNextGeneration()
         }
-
-        }
-
     }
 }
 
