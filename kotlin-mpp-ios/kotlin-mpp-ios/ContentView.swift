@@ -6,7 +6,7 @@ struct ContentView: View {
     
     @State private var inputA = ""
     @State private var inputB = ""
-    @State private var result = ""
+    @State private var result = "Result:"
 
     var body: some View {
         
@@ -28,7 +28,7 @@ struct ContentView: View {
             }
             .padding(.bottom)
             HStack {
-                Text("Result: \(self.result)")
+                Text(self.result)
             }
 
         }
