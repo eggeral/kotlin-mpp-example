@@ -2,6 +2,7 @@ package egger.software.kotlinmpp.javafx
 
 import egger.software.kotlinmpp.libgol.Cell
 import egger.software.kotlinmpp.libgol.Game
+import egger.software.kotlinmpp.libgol.GolCanvas
 import javafx.application.Application
 import javafx.application.Application.launch
 import javafx.application.Platform
@@ -31,25 +32,28 @@ class JavaFXExample : Application() {
     override fun start(primaryStage: Stage) {
 
         val canvas = Canvas(canvasWidth, canvasHeight)
+        val gc = canvas.graphicsContext2D
 
+        val golCanvas = GolCanvas(
+            board = board,
+            clear = {
+                gc.clearRect(0.0, 0.0, canvasWidth, canvasHeight)
+            },
+            drawRect = { left, top, size ->
+                gc.fill = Color.GRAY
+                gc.fillRect(left.toDouble(), top.toDouble(), size.toDouble(), size.toDouble())
+            }
+        )
         game.afterNextGenerationCalculated = {
-            drawBoard(canvas)
+            golCanvas.drawBoard()
         }
 
         canvas.onZoom = EventHandler { zoomEvent ->
-            val oldCellSize = board.cellSize
-            board.scale(zoomEvent.totalZoomFactor.toFloat())
-            val realScaleFactor = board.cellSize / oldCellSize
-
-            val distX = zoomEvent.x - offsetX
-            val distY = zoomEvent.y - offsetY
-
-            val corrX = distX - distX * realScaleFactor
-            val corrY = distY - distY * realScaleFactor
-
-            offsetX += corrX
-            offsetY += corrY
-            drawBoard(canvas)
+            golCanvas.zoom(
+                zoomFactor = zoomEvent.totalZoomFactor.toFloat(),
+                xPosition = zoomEvent.x.toFloat(),
+                yPosition = zoomEvent.y.toFloat()
+            )
         }
 
         val layout = VBox().apply {
@@ -82,34 +86,6 @@ class JavaFXExample : Application() {
         }
 
         game.resume()
-    }
-
-    private fun drawBoard(canvas: Canvas) {
-        val gc: GraphicsContext = canvas.graphicsContext2D
-        gc.clearRect(0.0, 0.0, canvasWidth, canvasHeight)
-        for (rowIdx in 0 until board.rows) {
-            for (columnIdx in 0 until board.columns) {
-                val cell = board.cellAt(column = columnIdx, row = rowIdx)
-                drawCell(canvas, cell, rowIdx, columnIdx)
-            }
-        }
-
-    }
-
-    private fun Canvas.drawCellAt(rowIdx: Int, columnIdx: Int) {
-        val gc: GraphicsContext = graphicsContext2D
-        val cellSize = board.cellSize.toDouble()
-        val cellPadding = board.cellPadding
-        val left = (columnIdx * cellSize) + cellPadding + offsetX
-        val top = (rowIdx * cellSize) + cellPadding + offsetY
-        gc.fill = Color.GRAY
-        gc.fillRect(left, top, cellSize - cellPadding, cellSize - cellPadding)
-    }
-
-    private fun drawCell(canvas: Canvas, cell: Cell, rowIdx: Int, columnIdx: Int) {
-        if (cell.alive) {
-            canvas.drawCellAt(rowIdx, columnIdx)
-        }
     }
 
 }
