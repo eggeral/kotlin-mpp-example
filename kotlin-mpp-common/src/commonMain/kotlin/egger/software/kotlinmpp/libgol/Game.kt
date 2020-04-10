@@ -3,6 +3,7 @@ package egger.software.kotlinmpp.libgol
 class Game {
 
     var afterNextGenerationCalculated: () -> Unit = {}
+    var running = false
     val board: Board
     private var timer: GolTimer? = null
 
@@ -29,11 +30,13 @@ class Game {
             board.calculateNextGeneration()
             afterNextGenerationCalculated()
         }
+        running = true
     }
 
     fun stop() {
         timer?.stop()
         timer = null
+        running = false
     }
 
 }
