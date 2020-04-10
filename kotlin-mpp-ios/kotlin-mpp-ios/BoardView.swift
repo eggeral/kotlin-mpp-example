@@ -4,6 +4,8 @@ import kotlin_mpp_common
 struct BoardView: View {
 
     @Binding var board: Board?
+    @State var lastScaleValue: CGFloat = 1.0
+    @State var scale: CGFloat = 1.0
 
     @ViewBuilder
     var body: some View {
@@ -17,6 +19,15 @@ struct BoardView: View {
                     }
                 }
             }
+            .gesture(MagnificationGesture()
+            .onChanged{value in
+                let delta = value / self.lastScaleValue
+                self.lastScaleValue = value
+                self.scale = self.scale * delta
+            }.onEnded{value in
+                self.lastScaleValue = 1.0
+            })
+
         }
         else {
             EmptyView()
@@ -28,11 +39,11 @@ struct BoardView: View {
         if (cell.alive) {
             return Rectangle()
             .fill(Color.gray)
-            .frame(width: 10, height: 10)
+            .frame(width: 10 * self.scale, height: 10 * self.scale)
         }
         return Rectangle()
         .fill(Color.white)
-        .frame(width: 10, height: 10)
+        .frame(width: 10 * self.scale, height: 10 * self.scale)
     }
 
 }

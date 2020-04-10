@@ -6,6 +6,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.RectF
 import android.util.AttributeSet
+import android.view.MotionEvent
+import android.view.ScaleGestureDetector
 import android.view.View
 import egger.software.kotlinmpp.libgol.Board
 import egger.software.kotlinmpp.libgol.Cell
@@ -21,6 +23,12 @@ class BoardView : View {
     var board: Board? = null
     var cellSize: Float = 25f // Overwritten in MainActivity
     var cellPadding: Float = 4f
+
+    var offsetX = 0.0f
+    var offsetY = 0.0f
+    var minCellSize = 5 * resources.displayMetrics.density
+    var maxCellSize = 60 * resources.displayMetrics.density
+
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -39,6 +47,10 @@ class BoardView : View {
 
     }
 
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return zoomDetector.onTouchEvent(event)
+    }
+
     private fun drawCell(canvas: Canvas, cell: Cell, rowIdx: Int, columnIdx: Int) {
         if (cell.alive) {
             canvas.drawRect(rectFor(rowIdx, columnIdx), paint)
@@ -51,7 +63,38 @@ class BoardView : View {
         val top = (rowIdx * cellSize) + cellPadding
         val bottom = (top + cellSize) - cellPadding
 
-        return RectF(left, top, right, bottom)
+        return RectF(left + offsetX, top + offsetY, right + offsetX, bottom + offsetY)
     }
+
+    private val zoomListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
+        override fun onScale(detector: ScaleGestureDetector): Boolean {
+
+            val newCellSize = cellSize * detector.scaleFactor
+            val oldCellSize = cellSize
+
+            cellSize = when {
+                newCellSize < minCellSize -> minCellSize
+                newCellSize > maxCellSize -> maxCellSize
+                else -> newCellSize
+            }
+
+            val realScaleFactor = cellSize / oldCellSize
+
+            val distX = detector.focusX - offsetX
+            val distY = detector.focusY - offsetY
+
+            val corrX = distX - distX * realScaleFactor
+            val corrY = distY - distY * realScaleFactor
+
+            offsetX += corrX
+            offsetY += corrY
+
+            invalidate()
+            return true
+        }
+
+    }
+
+    private val zoomDetector: ScaleGestureDetector = ScaleGestureDetector(context, zoomListener)
 
 }

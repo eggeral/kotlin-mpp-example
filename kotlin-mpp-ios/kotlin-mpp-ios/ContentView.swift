@@ -36,7 +36,7 @@ struct ContentView: View {
                             self.pauseResumeButtonText = "Pause"
                         }
                     }
-            )
+                )
         }
         .onAppear(perform: {
             self.boardStore.board = self.game.board
