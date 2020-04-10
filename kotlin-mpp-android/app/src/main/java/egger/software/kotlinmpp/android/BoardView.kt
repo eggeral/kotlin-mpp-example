@@ -1,16 +1,14 @@
 package egger.software.kotlinmpp.android
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import egger.software.kotlinmpp.libgol.Board
 import egger.software.kotlinmpp.libgol.Cell
+import egger.software.kotlinmpp.libgol.GolCanvas
 
 class BoardView : View {
 
@@ -22,21 +20,27 @@ class BoardView : View {
 
     lateinit var board: Board
 
-    var offsetX = 0.0f
-    var offsetY = 0.0f
-
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+    private val golCanvas = GolCanvas()
+    private val rect = RectF() // avoid object allocation in onDraw
+
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        for (rowIdx in 0 until board.rows) {
-            for (columnIdx in 0 until board.columns) {
-                drawCell(canvas, board.cellAt(column = columnIdx, row = rowIdx), rowIdx, columnIdx)
+        golCanvas.drawBoard(
+            board = board,
+            drawRect = { left, right, size ->
+                val deviceLeft = left * resources.displayMetrics.density
+                val deviceRight = right * resources.displayMetrics.density
+                val deviceSize = size * resources.displayMetrics.density
+                rect.set(deviceLeft, deviceRight, deviceLeft + deviceSize, deviceRight + deviceSize)
+                canvas.drawRect(rect, paint)
             }
-        }
+
+        )
 
     }
 
@@ -44,44 +48,11 @@ class BoardView : View {
         return zoomDetector.onTouchEvent(event)
     }
 
-    private fun drawCell(canvas: Canvas, cell: Cell, rowIdx: Int, columnIdx: Int) {
-        if (cell.alive) {
-            canvas.drawRect(rectFor(rowIdx, columnIdx), paint)
-        }
-    }
-
-    private fun rectFor(rowIdx: Int, columnIdx: Int): RectF {
-        val cellSize = board.cellSize * resources.displayMetrics.density
-        val cellPadding = board.cellPadding * resources.displayMetrics.density
-        val left = (columnIdx * cellSize) + cellPadding
-        val right = (left + cellSize) - cellPadding
-        val top = (rowIdx * cellSize) + cellPadding
-        val bottom = (top + cellSize) - cellPadding
-
-        return RectF(
-            left + offsetX,
-            top + offsetY,
-            right + offsetX,
-            bottom + offsetY
-        )
-    }
 
     private val zoomListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
 
-            val oldCellSize = board.cellSize
-            board.scale(detector.scaleFactor)
-            val realScaleFactor = board.cellSize / oldCellSize
-
-            val distX = detector.focusX - offsetX
-            val distY = detector.focusY - offsetY
-
-            val corrX = distX - distX * realScaleFactor
-            val corrY = distY - distY * realScaleFactor
-
-            offsetX += corrX
-            offsetY += corrY
-
+            golCanvas.zoom(board, detector.scaleFactor, detector.focusX, detector.focusY)
             invalidate()
             return true
         }

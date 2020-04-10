@@ -26,34 +26,22 @@ class JavaFXExample : Application() {
     private val canvasWidth = 400.0
     private val canvasHeight = 700.0
 
-    private var offsetX = 0.0
-    private var offsetY = 0.0
+    private val canvas = Canvas(canvasWidth, canvasHeight)
+    private val gc = canvas.graphicsContext2D
+    private val golCanvas = GolCanvas()
 
     override fun start(primaryStage: Stage) {
 
-        val canvas = Canvas(canvasWidth, canvasHeight)
-        val gc = canvas.graphicsContext2D
-
-        val golCanvas = GolCanvas(
-            board = board,
-            clear = {
-                gc.clearRect(0.0, 0.0, canvasWidth, canvasHeight)
-            },
-            drawRect = { left, top, size ->
-                gc.fill = Color.GRAY
-                gc.fillRect(left.toDouble(), top.toDouble(), size.toDouble(), size.toDouble())
-            }
-        )
-        game.afterNextGenerationCalculated = {
-            golCanvas.drawBoard()
-        }
+        game.afterNextGenerationCalculated = { drawBoard() }
 
         canvas.onZoom = EventHandler { zoomEvent ->
             golCanvas.zoom(
+                board = board,
                 zoomFactor = zoomEvent.totalZoomFactor.toFloat(),
                 xPosition = zoomEvent.x.toFloat(),
                 yPosition = zoomEvent.y.toFloat()
             )
+            drawBoard()
         }
 
         val layout = VBox().apply {
@@ -88,4 +76,14 @@ class JavaFXExample : Application() {
         game.resume()
     }
 
+    private fun drawBoard() {
+        golCanvas.drawBoard(
+            board = board,
+            clear = { gc.clearRect(0.0, 0.0, canvasWidth, canvasHeight) },
+            drawRect = { left, top, size ->
+                gc.fill = Color.GRAY
+                gc.fillRect(left.toDouble(), top.toDouble(), size.toDouble(), size.toDouble())
+            }
+        )
+    }
 }
