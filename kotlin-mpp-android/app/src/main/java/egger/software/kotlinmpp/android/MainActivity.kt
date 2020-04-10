@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         resumeIcon = resources.getDrawable(R.drawable.ic_resume_circle_outline_black_24dp, null)
         pauseIcon = resources.getDrawable(R.drawable.ic_pause_circle_outline_black_24dp, null)
 
-        boardView.cellSize = 14.0f * resources.displayMetrics.density
         boardView.board = game.board
 
         game.afterNextGenerationCalculated = { boardView.invalidate() }
@@ -47,8 +46,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override
-    fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        return when (item?.itemId) {
+    fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
             R.id.action_pause_resume -> {
                 if (game.running) {
                     item.icon = resumeIcon

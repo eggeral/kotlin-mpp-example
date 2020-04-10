@@ -20,15 +20,10 @@ class BoardView : View {
         strokeWidth = 0.0f
     }
 
-    var board: Board? = null
-    var cellSize: Float = 25f // Overwritten in MainActivity
-    var cellPadding: Float = 4f
+    lateinit var board: Board
 
     var offsetX = 0.0f
     var offsetY = 0.0f
-    var minCellSize = 5 * resources.displayMetrics.density
-    var maxCellSize = 60 * resources.displayMetrics.density
-
 
     constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
@@ -36,8 +31,6 @@ class BoardView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
-        val board = board ?: return
 
         for (rowIdx in 0 until board.rows) {
             for (columnIdx in 0 until board.columns) {
@@ -58,27 +51,27 @@ class BoardView : View {
     }
 
     private fun rectFor(rowIdx: Int, columnIdx: Int): RectF {
+        val cellSize = board.cellSize * resources.displayMetrics.density
+        val cellPadding = board.cellPadding * resources.displayMetrics.density
         val left = (columnIdx * cellSize) + cellPadding
         val right = (left + cellSize) - cellPadding
         val top = (rowIdx * cellSize) + cellPadding
         val bottom = (top + cellSize) - cellPadding
 
-        return RectF(left + offsetX, top + offsetY, right + offsetX, bottom + offsetY)
+        return RectF(
+            left + offsetX,
+            top + offsetY,
+            right + offsetX,
+            bottom + offsetY
+        )
     }
 
     private val zoomListener = object : ScaleGestureDetector.SimpleOnScaleGestureListener() {
         override fun onScale(detector: ScaleGestureDetector): Boolean {
 
-            val newCellSize = cellSize * detector.scaleFactor
-            val oldCellSize = cellSize
-
-            cellSize = when {
-                newCellSize < minCellSize -> minCellSize
-                newCellSize > maxCellSize -> maxCellSize
-                else -> newCellSize
-            }
-
-            val realScaleFactor = cellSize / oldCellSize
+            val oldCellSize = board.cellSize
+            board.scale(detector.scaleFactor)
+            val realScaleFactor = board.cellSize / oldCellSize
 
             val distX = detector.focusX - offsetX
             val distY = detector.focusY - offsetY

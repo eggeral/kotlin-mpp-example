@@ -4,7 +4,23 @@ data class Position2d(val column: Int, val row: Int)
 
 class Board(val columns: Int, val rows: Int) {
 
-    private val cells: Array<Array<Cell>> = Array(rows) { _ -> Array(columns) { Cell(false) } }
+
+    var cellSize = 15.0f
+    var minCellSize = 7.0f
+    var maxCellSize = 60.0f
+    var cellPadding = 3.0f
+
+    private val cells: Array<Array<Cell>> = Array(rows) { Array(columns) { Cell(false) } }
+
+    fun scale(scaleFactor: Float) {
+        val newCellSize = cellSize * scaleFactor
+
+        cellSize = when {
+            newCellSize < minCellSize -> minCellSize
+            newCellSize > maxCellSize -> maxCellSize
+            else -> newCellSize
+        }
+    }
 
     fun calculateNextGeneration() {
 
@@ -31,24 +47,19 @@ class Board(val columns: Int, val rows: Int) {
         }
     }
 
-    // try with 1000x1000 cells -> too many objects are created -> Iterators etc.
-    //    fun countLivingNeighbours(column: Int, row: Int) = (row - 1..row + 1)
-    //            .flatMap { rowIdx -> (column - 1..column + 1).map { columnIdx -> Position2d(columnIdx, rowIdx) } }
-    //            .asSequence()
-    //            .filter { it.column in 0 until columns } // prevent array out of bounds
-    //            .filter { it.row in 0 until rows } // prevent array out of bounds
-    //            .filter { it != Position2d(column = column, row = row) } // do not count the cell itself
-    //            .map { cellAt(it) }.count { it.alive }
-
     private fun cellIsInsideBoardAndAlive(column: Int, row: Int) =
-            column >= 0 && row >= 0 && column < columns && row < rows && cells[row][column].alive
+        column >= 0 && row >= 0 && column < columns && row < rows && cells[row][column].alive
 
     fun countLivingNeighbours(column: Int, row: Int): Int {
         var count = 0
 
         for (currentRow in row - 1..row + 1) { // fortunately the Kotlin compiler does not create Range objects in this case!
             for (currentColumn in column - 1..column + 1) {
-                if (cellIsInsideBoardAndAlive(currentColumn, currentRow) && !(currentRow == row && currentColumn == column)) // do not count the cell itself
+                if (cellIsInsideBoardAndAlive(
+                        currentColumn,
+                        currentRow
+                    ) && !(currentRow == row && currentColumn == column)
+                ) // do not count the cell itself
                     count++
             }
         }
@@ -82,12 +93,13 @@ private const val size = 1000
 val defaultBoard: Board = Board(size, size).apply {
 
     setCells(
-            """
+        """
                 ***_*
                 *____
                 ___**
                 _**_*
                 *_*_*
-                """.trimIndent().cells().translatedTo(size / 2 - 2, size / 2 - 2))
+                """.trimIndent().cells().translatedTo(size / 2 - 2, size / 2 - 2)
+    )
 
 }
