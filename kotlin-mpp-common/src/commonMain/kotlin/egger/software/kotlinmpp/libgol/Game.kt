@@ -24,7 +24,7 @@ class Game {
 
     }
 
-    fun start() {
+    fun resume() {
         if (timer != null) return
         timer = GolTimer {
             board.calculateNextGeneration()
@@ -33,7 +33,7 @@ class Game {
         running = true
     }
 
-    fun stop() {
+    fun pause() {
         timer?.stop()
         timer = null
         running = false

@@ -11,7 +11,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private val game = Game()
-    private lateinit var playIcon: Drawable
+    private lateinit var resumeIcon: Drawable
     private lateinit var pauseIcon: Drawable
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,25 +20,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        playIcon = resources.getDrawable(R.drawable.ic_play_circle_outline_black_24dp, null)
+        resumeIcon = resources.getDrawable(R.drawable.ic_resume_circle_outline_black_24dp, null)
         pauseIcon = resources.getDrawable(R.drawable.ic_pause_circle_outline_black_24dp, null)
 
         boardView.cellSize = 14.0f * resources.displayMetrics.density
         boardView.board = game.board
 
         game.afterNextGenerationCalculated = { boardView.invalidate() }
-        game.start()
+        game.resume()
 
     }
 
     override fun onResume() {
         super.onResume()
-        game.start()
+        game.resume()
     }
 
     override fun onPause() {
         super.onPause()
-        game.stop()
+        game.pause()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -49,13 +49,13 @@ class MainActivity : AppCompatActivity() {
     override
     fun onOptionsItemSelected(item: MenuItem?): Boolean {
         return when (item?.itemId) {
-            R.id.action_start_stop -> {
+            R.id.action_pause_resume -> {
                 if (game.running) {
-                    item.icon = playIcon
-                    game.stop()
+                    item.icon = resumeIcon
+                    game.pause()
                 } else {
                     item.icon = pauseIcon
-                    game.start()
+                    game.resume()
                 }
                 true
             }

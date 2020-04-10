@@ -17,22 +17,37 @@ class BoardStore: ObservableObject {
 
 struct ContentView: View {
 
-    
     let game = Game()
+
+    @State var pauseResumeButtonText = "Pause"
     @ObservedObject var boardStore = BoardStore()
 
     var body: some View {
-        BoardView(board: $boardStore.board)
-            .onAppear(perform: {
-                self.boardStore.board = self.game.board
-                self.game.afterNextGenerationCalculated = {
-                    self.boardStore.calculateNextGeneration()
-                }
-                self.game.start()
-            })
-            .onDisappear(perform: {
-                self.game.stop()
-            })
+        
+        NavigationView {
+            BoardView(board: $boardStore.board)
+                .navigationBarItems(trailing:
+                    Button(self.pauseResumeButtonText) {
+                        if self.game.running {
+                            self.game.pause()
+                            self.pauseResumeButtonText = "Resume"
+                        } else {
+                            self.game.resume()
+                            self.pauseResumeButtonText = "Pause"
+                        }
+                    }
+            )
+        }
+        .onAppear(perform: {
+            self.boardStore.board = self.game.board
+            self.game.afterNextGenerationCalculated = {
+                self.boardStore.calculateNextGeneration()
+            }
+            self.game.resume()
+        })
+        .onDisappear(perform: {
+            self.game.pause()
+        })
     }
 }
 

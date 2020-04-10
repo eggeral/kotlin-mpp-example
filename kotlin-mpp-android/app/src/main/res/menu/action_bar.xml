@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_start_stop"
+        android:id="@+id/action_pause_resume"
         android:icon="@drawable/ic_pause_circle_outline_black_24dp"
         app:showAsAction="always"
         android:title="@string/start" />
