@@ -6,6 +6,9 @@ repositories {
 
 kotlin {
     jvm()
+    js {
+        browser()
+    }
     iosX64 {
         binaries {
             framework()
@@ -32,6 +35,16 @@ kotlin {
             dependencies {
                 implementation kotlin('test')
                 implementation kotlin('test-junit')
+            }
+        }
+        jsMain {
+            dependencies {
+                implementation(kotlin("stdlib-js"))
+            }
+        }
+        jsTest {
+            dependencies {
+                implementation(kotlin("test-js"))
             }
         }
 

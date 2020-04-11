@@ -4,6 +4,7 @@ include ':kotlin-mpp-common'
 include ':kotlin-mpp-android'
 include ':kotlin-mpp-android:app'
 include ':kotlin-mpp-javafx'
+include ':kotlin-mpp-browser'
 
 enableFeaturePreview("GRADLE_METADATA")
 
