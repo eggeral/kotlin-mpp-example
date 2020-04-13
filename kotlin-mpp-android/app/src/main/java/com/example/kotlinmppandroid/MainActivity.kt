@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
             val numberA = inputA.text.toString().toDoubleOrNull() ?: 0.0
             val numberB = inputB.text.toString().toDoubleOrNull() ?: 0.0
             val resultValue = numberA + numberB
-            result.text = "Result: ${resultValue}"
+            result.text = "Result: $resultValue"
 
         }
     }
