@@ -22,7 +22,9 @@ struct ContentView: View {
                     .keyboardType(.numberPad)
             }
             Button(action: {
-                self.result = CalculatorKt.add(inputA: self.inputA,inputB: self.inputB)
+                self.result = CalculatorKt.add(
+                    inputA: self.inputA,
+                    inputB: self.inputB)
             }) {
                 Text("Calculate")
             }
