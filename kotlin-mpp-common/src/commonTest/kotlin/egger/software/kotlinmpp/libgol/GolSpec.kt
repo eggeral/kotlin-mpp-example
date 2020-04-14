@@ -1,9 +1,6 @@
 package egger.software.kotlinmpp.libgol
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
+import kotlin.test.*
 
 class GolSpec {
     @Test
@@ -174,7 +171,7 @@ class GolSpec {
     }
 
     @Test
-    fun `Cells and positions can be parsed from a string`() {
+    fun cellsAndPositionsCanBeParsedFromAString() {
         assertEquals(mapOf(
                 Position2d(0, 0) to false,
                 Position2d(1, 0) to true,
@@ -191,7 +188,7 @@ class GolSpec {
     }
 
     @Test
-    fun `Cell definitions can be shifted to a position`() {
+    fun cellDefinitionsCanBeShiftedToAPosition() {
         assertEquals(mapOf(
                 Position2d(5, 3) to false,
                 Position2d(6, 3) to true,
