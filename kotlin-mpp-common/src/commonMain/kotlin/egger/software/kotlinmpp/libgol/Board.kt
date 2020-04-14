@@ -38,7 +38,7 @@ class Board(val columns: Int, val rows: Int) {
     }
 
     fun cellAt(column: Int, row: Int) = cells[row][column]
-    fun cellAt(position2d: Position2d) = cells[position2d.row][position2d.column]
+    private fun cellAt(position2d: Position2d) = cells[position2d.row][position2d.column]
 
     fun setCells(cellDefinitions: Map<Position2d, Boolean>) {
         for (cellDefinition in cellDefinitions.entries) {
@@ -64,7 +64,6 @@ class Board(val columns: Int, val rows: Int) {
         }
         return count
 
-
     }
 
 }
@@ -87,18 +86,3 @@ fun Map<Position2d, Boolean>.translatedTo(column: Int, row: Int): Map<Position2d
     return result
 }
 
-private const val size = 1000
-
-val defaultBoard: Board = Board(size, size).apply {
-
-    setCells(
-        """
-                ***_*
-                *____
-                ___**
-                _**_*
-                *_*_*
-                """.trimIndent().cells().translatedTo(size / 2 - 2, size / 2 - 2)
-    )
-
-}

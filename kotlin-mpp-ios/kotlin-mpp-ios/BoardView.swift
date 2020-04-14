@@ -19,13 +19,15 @@ struct BoardView: View {
                 }
             }
             .gesture(MagnificationGesture()
-            .onChanged{value in
-                let delta = value / self.lastScaleValue
-                self.lastScaleValue = value
-                self.board!.scale(scaleFactor: Float(delta))
-            }.onEnded{value in
-                self.lastScaleValue = 1.0
-            })
+                .onChanged{value in
+                    let delta = value / self.lastScaleValue
+                    self.lastScaleValue = value
+                    self.board!.scale(scaleFactor: Float(delta))
+                }
+                .onEnded{value in
+                    self.lastScaleValue = 1.0
+                }
+            )
 
         }
         else {
