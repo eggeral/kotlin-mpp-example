@@ -8,7 +8,6 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import egger.software.kotlinmpp.libgol.Board
-import egger.software.kotlinmpp.libgol.Cell
 
 class BoardView : View {
 
@@ -33,16 +32,12 @@ class BoardView : View {
 
         for (rowIdx in 0 until board.rows) {
             for (columnIdx in 0 until board.columns) {
-                drawCell(canvas, board.cellAt(column = columnIdx, row = rowIdx), rowIdx, columnIdx)
+                if (board.cellAt(column = columnIdx, row = rowIdx).alive) {
+                    canvas.drawRect(rectFor(rowIdx, columnIdx), paint)
+                }
             }
         }
 
-    }
-
-    private fun drawCell(canvas: Canvas, cell: Cell, rowIdx: Int, columnIdx: Int) {
-        if (cell.alive) {
-            canvas.drawRect(rectFor(rowIdx, columnIdx), paint)
-        }
     }
 
     private fun rectFor(rowIdx: Int, columnIdx: Int): RectF {
@@ -50,7 +45,6 @@ class BoardView : View {
         val right = (left + cellSize) - cellPadding
         val top = (rowIdx * cellSize) + cellPadding
         val bottom = (top + cellSize) - cellPadding
-
         return RectF(left, top, right, bottom)
     }
 
