@@ -7,7 +7,6 @@ import android.view.MotionEvent
 import android.view.ScaleGestureDetector
 import android.view.View
 import egger.software.kotlinmpp.libgol.Board
-import egger.software.kotlinmpp.libgol.Cell
 import egger.software.kotlinmpp.libgol.GolCanvas
 
 class BoardView : View {
