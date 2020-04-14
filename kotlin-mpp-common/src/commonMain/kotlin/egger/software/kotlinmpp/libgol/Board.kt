@@ -4,13 +4,10 @@ data class Position2d(val column: Int, val row: Int)
 
 class Board(val columns: Int, val rows: Int) {
 
-
     var cellSize = 15.0f
     var minCellSize = 7.0f
     var maxCellSize = 60.0f
     var cellPadding = 3.0f
-
-    private val cells: Array<Array<Cell>> = Array(rows) { Array(columns) { Cell(false) } }
 
     fun scale(scaleFactor: Float) {
         val newCellSize = cellSize * scaleFactor
@@ -21,6 +18,8 @@ class Board(val columns: Int, val rows: Int) {
             else -> newCellSize
         }
     }
+
+    private val cells: Array<Array<Cell>> = Array(rows) { Array(columns) { Cell(false) } }
 
     fun calculateNextGeneration() {
 
