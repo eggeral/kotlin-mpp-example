@@ -1,3 +1,4 @@
+include ':kotlin-mpp-common'
 include ':kotlin-mpp-android'
 include ':kotlin-mpp-android:app'
 
