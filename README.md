@@ -6,3 +6,5 @@ app which with share Kotlin code.
 
 We will then extend the scope of the app even further and create a web application, and a JavaFX 
 application using the same shared source as for Android and iOS.
+
+Follow the branches from starting from step001 to see the project evolving.
