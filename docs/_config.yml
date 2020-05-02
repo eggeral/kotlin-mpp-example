@@ -1,8 +1,0 @@
-title: Kotlin Mutliplatfom Example
-
-theme: jekyll-theme-midnight
-
-collections:
-  steps:
-    output: true
-
